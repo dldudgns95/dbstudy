@@ -73,3 +73,18 @@ Enter value for 4: ?\demo\schema\log
 
 
 
+//SQL Developer 테이블 만들기
+CREATE TABLE CUSTOMER_T (
+    고객번호 NUMBER NOT NULL PRIMARY KEY,
+    아이디 VARCHAR2(32 BYTE) NOT NULL UNIQUE,
+    고객명 VARCHAR2(32 BYTE) NOT NULL,
+    직업   VARCHAR2(32 BYTE),
+    핸드폰 VARCHAR2(11 BYTE) UNIQUE,
+    주민번호 VARCHAR2(13 BYTE) UNIQUE
+);
+//표에 내용 삽입
+INSERT INTO CUSTOMER_T(고객번호,아이디,고객명,직업,핸드폰,주민번호) VALUES(1,'GD','이영훈','학생','01011112222','1234561234567');
+
+//테이블 드랍
+DROP TABLE CUSTOMER_T;
+

@@ -1,0 +1,36 @@
+// git 설치 시 master가 아닌 main 으로 설정
+
+git init						//로컬 레파지토리로 만듦
+
+// 윈도우에서 txt파일 만들기
+git status						//저장소 상태 확인
+결과
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        .gitignore
+
+git add 만든 파일					// 파일 수정했을 때 변경사항 추가
+git add .						//현재 디렉토리에 있는 모든 파일 변경사항 추가
+git rm --cached 파일명					//추적되지않는 상태로 변경
+
+git config user.email 이메일				// 이메일 설정
+git config user.name 아이디				// 이름 설정
+
+git commit						//vim 편집기 실행
+git commit -m '내용'					//편집기 열지 않고 내용 저장
+a = 편집모드
+esc = 편집모드 끝냄
+:wq = 저장하고 나감
+
+git log							//commit에서 파일 수정한 시간 확인
+git log --oneline					//commit 아이디 줄여서 보여줌
+
+touch 파일명						// 파일 만들기
+echo 'hello' >> a.txt					//파일에 hello 글 작성
+
+git reset --hard '코드'					//'코드'에 적혀 있는 commit으로 리셋시킴
+'코드' =  git log --oneline 으로 나오는 7자리 코드
+
+
+git remote add origin https://github.com/dldudgns95/dbstudy.git		// 원격 레파지토리 등록
+git push origin main					// 로컬->원격으로 올리기

@@ -32,7 +32,7 @@
     4. FOREIGN KEY  : 외래키
     5. CHECK        : 값의 제한
 */
-//고객 테이블
+--고객 테이블
 DROP TABLE CUSTOMER_T;
 CREATE TABLE CUSTOMER_T(
     NO         NUMBER       NOT NULL    PRIMARY KEY,

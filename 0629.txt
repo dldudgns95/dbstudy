@@ -1,4 +1,5 @@
 //SQL 사용자 이름은 C## 으로 시작되어야 한다
+ALTER SESSION SET '_ORACLE SCRIPT' = TRUE;		//계정명 C##쓰지 않고 사용하는 법
 
 create user 아이디 identified by 비밀번호;		// 계정 생성
 conn							//계정 접속

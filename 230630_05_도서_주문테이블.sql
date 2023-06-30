@@ -15,7 +15,7 @@ CREATE TABLE BOOK_T(
     CONSTRAINT PK_BOOK PRIMARY KEY(BOOK_NO)
 );
 
---고객 테이블 고객번호(시퀀스사용), 고객이름, 주소, 전화번호
+--고객 테이블 고객번호, 고객이름, 주소, 전화번호
 CREATE TABLE CUSTOMER_T(
     CUSTOMER_NO     NUMBER       NOT NULL,
     CUSTOMER_NAME   VARCHAR(32)  NOT NULL,
@@ -24,7 +24,7 @@ CREATE TABLE CUSTOMER_T(
     CONSTRAINT PK_CUSTOMER PRIMARY KEY(CUSTOMER_NO)
 );
 
---주문 테이블 주문번호(시퀀스사용), 고객번호, 도서번호, 주문일자, 주문금액
+--주문 테이블 주문번호, 고객번호, 도서번호, 주문일자, 주문금액
 CREATE TABLE ORDER_T(
     ORDER_NO    NUMBER NOT NULL,
     CUSTOMER_NO NUMBER NOT NULL,

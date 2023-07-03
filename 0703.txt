@@ -11,3 +11,17 @@ DDL
 테이블 이름 규칙
 -대소문자를 구별하지 않는다.
 
+DROP TABLE 명령어는 테이블을 완전히 삭제한다.
+복구할 수 없기 떄문에 주의해서 사용해야 한다.
+
+TRUNCATE TABLE 명령어는 모든 행만 삭제하는 명령이다.
+삭제된 데이터는 복구할 수 없다.
+
+SQL Developer - model 테이블과의 관계에서 
+
+실선 - NOT NULL
+점선 - NULL
+
+X - ON DELETE CASCADE
+O - ON DELETE SET NULL
+

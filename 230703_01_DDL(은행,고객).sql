@@ -8,8 +8,8 @@
         -CREATE   : 생성
         -ALTER    : 수정
         -DROP     : 삭제
-        -TRUNCATE : 삭제(내용(ROW)만 삭제)
-*/
+        -TRUNCATE : 삭제(내용(ROW)만 삭제) 
+*/ 
 --테이블 삭제
 DROP TABLE CUSTOMER_TBL;
 DROP TABLE BANK_TBL;

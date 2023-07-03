@@ -1,11 +1,12 @@
 DDL
+-데이터와 데이터 간의 관계를 정의하여 데이터베이스 구조를 설정하는 SQL 문
 -테이블 (Table), 뷰 (View) 등 데이터베이스 객체를 생성 수정 삭제하는 기능을 담당
 -실행 후에는 작업을 취소할 수 없음
 
 종류
--CREATE : 데이터베이스 객체 생성
--ALTER : 데이터베이스 객체 수정
--DROP : 데이터베이스 객체 삭제
+-CREATE   : 데이터베이스 객체 생성
+-ALTER    : 데이터베이스 객체 수정
+-DROP     : 데이터베이스 객체 삭제
 -TRUNCATE : 데이터베이스 객체 데이터 및 저장 공간 삭제
 
 테이블 이름 규칙
@@ -24,4 +25,15 @@ SQL Developer - model 테이블과의 관계에서
 
 X - ON DELETE CASCADE
 O - ON DELETE SET NULL
+
+
+DML(Data Manipulation Language)
+-정의된 데이터베이스에 데이터를 삽입하거나 수정하거나 삭제하는 역할을 수행하는 SQL 문
+-테이블 ( 이나 뷰 (View) 등의 데이터베이스 객체에 행 ( 을 삽입 수정 삭제하는 기능을 담당
+-실행 후에 작업의 완료 또는 취소 처리 가능
+
+DML 종류
+-INSERT : 행 (Row) 삽입
+-UPDATE : 행 (Row) 수정
+-DELETE : 행 (Row) 삭제
 

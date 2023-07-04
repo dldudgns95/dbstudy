@@ -53,12 +53,16 @@ SELECT *
                          --ASC : Ascending(오름차순)
 SELECT *
   FROM EMPLOYEES
+ ORDER BY SALARY ASC;    --ASC : Ascending(오름차순)
+                         
+SELECT *
+  FROM EMPLOYEES
  ORDER BY SALARY DESC;   --DESC : Descending(내림차순)
  
 --12. 사원 테이블의 사원들을 입사순으로 조회하기(먼저 입사한 사원을 먼저 조회)
 SELECT *
   FROM EMPLOYEES
- ORDER BY HIRE_DATE ASC;    --ASC(오름차순)는 생략할 수 있다.
+ ORDER BY HIRE_DATE;    --ASC(오름차순)는 생략할 수 있다.
  
 --13. 사원 테이블의 사원들을 부서별로 비교할 수 있도록 같은 사원들을 모아서 조회한 뒤,
 --같은 부서내의 사원들은 연봉순으로 조회하기(연봉 높은 순으로 먼저 조회)
@@ -67,5 +71,6 @@ SELECT *
 SELECT *
   FROM EMPLOYEES
  ORDER BY DEPARTMENT_ID, SALARY DESC;
+
 
 

@@ -44,6 +44,9 @@ SELECT TO_CHAR(1234),
 SELECT TO_CHAR(HIRE_DATE,'YYYY-MM-DD')
   FROM EMPLOYEES;
   
+SELECT TO_CHAR(SYSDATE,'YYYY-MM-DD')
+  FROM DUAL;
+  
 /*
     4. 문자 -> 날짜로 변환하기
         TO_DATE(문자,[형식])

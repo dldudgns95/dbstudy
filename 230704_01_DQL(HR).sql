@@ -50,7 +50,7 @@ SELECT *
 SELECT *
   FROM EMPLOYEES
  ORDER BY SALARY;        --기본 정렬 방식은 오름차순(ASC)이다.
-                         --ASC : Ascending(오름차순)
+                        
 SELECT *
   FROM EMPLOYEES
  ORDER BY SALARY ASC;    --ASC : Ascending(오름차순)

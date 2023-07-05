@@ -1,0 +1,67 @@
+수학함수
+1. 절대값		: ABS(숫자)		-- 숫자의 절대값
+2. 제곱근		: SQRT(숫자)		-- 숫자의 루트
+3. 부호 판별		: SIGN(숫자)		-- 숫자가 양수면 1, 음수는 -1, 0이면 0 반환
+4. 제곱			: POWER(숫자1,숫자2)	-- 숫자1의 숫자2 제곱
+5. 나머지		: MOD(숫자1,숫자2)	-- 숫자1을 숫자2로 나눈 나머지
+6. 정수로 올림		: CEIL(1.99)		-- 1.99보다 큰 정수
+7. 정수로 내림		: FLOOR(2.01)		-- 2.01보다 작은 정수
+8. 원하는 자릿수로 반올림	: ROUND(12.34)		-- 정수로 반올림
+			  ROUND(12.345		-- 소수 2자리로 반올림
+9. 원하는 자릿수로 절사	:  TRUNC(12.34)		-- 정수로 절사
+			  TRUNC(12.345,2)	-- 소수 2자리로 절사
+
+
+날짜시간 함수
+1. 현재 날짜 및 시간
+	1)SYSDATE, SYSTIMESTAMP : 오라클에 설치된 시간 기준
+	2)CURRENT_DATE, CURRENT_TIMESTAMP : 세션타임존 시간 기준
+2. 날짜를 원하는 형식으로 조회
+	TO_CHAR(SYSDATE, 'YYYY-MM-DD')
+	TO_CHAR(SYSTIMESTAMP, 'YYYY-MM-DD AM HH:MI:SS')
+3. DATE 형식의 날짜 연산
+	TO_CHAR(SYSDATE + 1/24/60/60, 'YYYY-MM-DD AM HH:MI:SS')		-- 1초 후
+4. TIMESTAMP 형식의 날짜 연산
+	SYSTIMESTAMP + INTERVAL '1' SECOND				-- 1초 후
+5. 필요한 단위 추출
+	EXTRACT(SECOND FROM SYSTIMESTAMP)				-- 초
+6. 요일을 기준으로 특정 날짜 구하기
+	NEXT_DAY(SYSDATE - 8, '수')      				-- 지난 수요일(SYSDATE-7이 아님을 주의)
+7. N개월 전후 날짜 구하기
+	ADD_MONTHS(SYSDATE, 1)						-- 1개월 후
+8. 경과한 개월 수 확인하기
+	MONTHS_BETWEEN(SYSDATE, TO_DATE('23/01/01', 'YY/MM/DD')
+
+문자열 함수
+1. 대소문자 변환
+	UPPER(칼럼명)				-- 모두 대문자
+	LOWER(칼럼명)				-- 모두 소문자
+	INITCAP(칼럼명)				-- 첫 글자만 대문자
+2. 글자 수
+	LENGTH(칼럼명)
+3. 바이트 수
+	LENGTHB(칼럼명)
+4. 연결하기
+	CONCAT(A, B)
+	||연산자(오라클 한정)
+5.일부만 반환하기
+	SUBSTR(칼럼명,1,3)			-- 칼럼명에서 1번째 글자부터 3글자를 반환
+6. 특정 문자의 위치 반환
+	INSTR(칼럼명,'A')			-- 칼럼명에서 A의 위치 반환
+7. 바꾸기
+	REPLACE(칼럼명,'A','S')			-- 칼럼명에 있는 모든 'A'를 'S'로 변경
+8. 채우기
+	LPAD(표현식,전체폭,채울문자)		-- 왼쪽에서 채우기
+	RPAD(표현식,전체폭,채울문자)		-- 오른쪽에서 채우기
+9. 공백 제거
+	LTRIM(표현식)				-- 왼쪽 공백 제거
+	RTRIM(표현식)				-- 오른쪽 공백 제거
+	TRIM(표현식)				-- 왼쪽/오른쪽 공백 제거
+
+
+기타 함수
+1. 순위 구하기 ( 동점자는 같은 순위를 가짐)
+	RANK() OVER(ORDER BY 칼럼 ASC)		-- 오름차순
+	RANK() OVER(ORDER BY 칼럼 DESC)		-- 내림차순
+2. 행 번호 구하기(동점자 처리방식 없음)
+	ROW_NUMBER() OVER(ORDER BY 칼럼명 DESC)

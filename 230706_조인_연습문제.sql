@@ -54,12 +54,12 @@ SELECT EMPLOYEE_ID
 
 -- 4. 부서별 DEPARTMENT_NAME과 사원 수와 평균 연봉을 조회하시오.
 -- 1) ANSI
-SELECT DISTINCT D.DEPARTMENT_NAME                               AS 부서이름
-     , COUNT(*) OVER(PARTITION BY E.DEPARTMENT_ID)              AS 사원수
-     , TRUNC(AVG(SALARY) OVER(PARTITION BY D.DEPARTMENT_NAME))  AS 평균연봉
+SELECT D.DEPARTMENT_NAME                               AS 부서이름
+     , COUNT(*)                                        AS 사원수
+     , AVG(E.SALARY)                                   AS 평균연봉
   FROM DEPARTMENTS D INNER JOIN EMPLOYEES E
-    ON D.DEPARTMENT_ID = E.DEPARTMENT_ID;
-
+    ON D.DEPARTMENT_ID = E.DEPARTMENT_ID
+ GROUP BY D.DEPARTMENT_NAME, D.DEPARTMENT_ID;
 
 -- 2) 오라클
 SELECT DISTINCT D.DEPARTMENT_NAME                               AS 부서이름
@@ -90,11 +90,12 @@ SELECT EMPLOYEE_ID
 
 -- 6. 모든 부서의 DEPARTMENT_NAME과 근무 중인 사원 수를 조회하시오. 근무하는 사원이 없으면 0으로 조회하시오.
 -- 1) ANSI
-SELECT DISTINCT D.DEPARTMENT_ID                                     AS 부서ID
-     , DEPARTMENT_NAME                                              AS 부서이름
-     , COUNT(E.DEPARTMENT_ID) OVER(PARTITION BY E.DEPARTMENT_ID)    AS 사원수
+SELECT D.DEPARTMENT_ID                                     AS 부서ID
+     , DEPARTMENT_NAME                                     AS 부서이름
+     , COUNT(E.EMPLOYEE_ID)                                AS 사원수
   FROM DEPARTMENTS D LEFT OUTER JOIN EMPLOYEES E
     ON D.DEPARTMENT_ID = E.DEPARTMENT_ID
+ GROUP BY D.DEPARTMENT_ID, D.DEPARTMENT_NAME
  ORDER BY D.DEPARTMENT_ID;
 
 

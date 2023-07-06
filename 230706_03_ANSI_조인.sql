@@ -45,7 +45,7 @@ SELECT EMPLOYEE_ID                               AS 사원번호
     
 -- 외부 조인
 
---1. 모든 사원들의(부서가 없는 사원도 포함) 사원번호, 사원명, 부서번호, 부서명을 조회하시오.
+--3. 모든 사원들의(부서가 없는 사원도 포함) 사원번호, 사원명, 부서번호, 부서명을 조회하시오.
 SELECT EMPLOYEE_ID
      , CONCAT(CONCAT(FIRST_NAME,' '), LAST_NAME) AS 사원명
      , D.DEPARTMENT_ID
@@ -59,4 +59,26 @@ SELECT EMPLOYEE_ID
      , D.DEPARTMENT_ID
      , DEPARTMENT_NAME
   FROM DEPARTMENTS D LEFT OUTER JOIN EMPLOYEES E            --왼쪽 테이블(DEPARTMENTS)의 모든 데이터를 조회한다.(사원이 근무하지 않는 부서도 조회한다.)
-    ON E.DEPARTMENT_ID = D.DEPARTMENT_ID;
+    ON E.DEPARTMENT_ID = D.DEPARTMENT_ID(+);
+    
+-- 3개 이상 테이블 조인하기
+
+--5. 사원번호, 사원명, 부서번호, 부서명, 근무지역을 조회하시오.
+SELECT EMPLOYEE_ID                               AS 사원번호
+     , CONCAT(CONCAT(FIRST_NAME,' '), LAST_NAME) AS 사원명
+     , D.DEPARTMENT_ID                           AS 부서번호
+     , DEPARTMENT_NAME                           AS 부서명
+     , L.LOCATION_ID                             AS 근무번호
+     , CITY                                      AS 근무지역
+  FROM LOCATIONS L INNER JOIN DEPARTMENTS D
+    ON L.LOCATION_ID = D.LOCATION_ID INNER JOIN EMPLOYEES E
+    ON D.DEPARTMENT_ID = E.DEPARTMENT_ID;
+    
+--6. 부서번호, 부서명, 근무도시, 근무국가를 조회하시오.
+SELECT DEPARTMENT_ID        AS 부서번호
+     , DEPARTMENT_NAME      AS 부서명
+     , CITY                 AS 근무도시
+     , COUNTRY_NAME         AS 근무국가
+  FROM COUNTRIES C INNER JOIN LOCATIONS L
+    ON C.COUNTRY_ID = L.COUNTRY_ID INNER JOIN DEPARTMENTS D
+    ON L.LOCATION_ID = D.LOCATION_ID;

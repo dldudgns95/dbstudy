@@ -232,7 +232,7 @@ NULL 처리 함수
 4. TIMESTAMP 형식의 날짜 연산
 	SYSTIMESTAMP + INTERVAL '1' SECOND				-- 1초 후
 5. 필요한 단위 추출
-	EXTRACT(SECOND FROM SYSTIMESTAMP)				-- 초
+	EXTRACT(SECOND FROM SYSTIMESTAMP)				-- 초만 추출
 6. 요일을 기준으로 특정 날짜 구하기
 	NEXT_DAY(SYSDATE - 8, '수')      				-- 지난 수요일(SYSDATE-7이 아님을 주의)
 7. N개월 전후 날짜 구하기
@@ -471,3 +471,4 @@ SELECT EMPLOYEE_ID
   FROM MY_SUBQUERY
  WHERE RN BETWEEN 1 AND 10;
  
+

@@ -239,6 +239,11 @@ SELECT *
 -- 책      1개
 -- 벨트    0개
 
+SELECT PROD_NAME
+     , NVL(BUY_AMOUNT,0) || '개'
+  FROM PRODUCT_T P LEFT OUTER JOIN BUY_T B
+    ON P.PROD_CODE = B.PROD_CODE;
+
 
 -- 13. 제품을 구매한 이력이 있는 고객의 아이디, 고객명, 구매횟수, 총구매액을 조회하시오.
 -- 아이디  고객명  구매횟수  총구매액

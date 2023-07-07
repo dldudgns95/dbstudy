@@ -115,11 +115,12 @@ SELECT COUNT(*)
  ORDER BY DEPARTMENT_ID;
  
 -- 2) 오라클
-SELECT DISTINCT D.DEPARTMENT_ID                                     AS 부서ID
-     , DEPARTMENT_NAME                                              AS 부서이름
-     , COUNT(E.DEPARTMENT_ID) OVER(PARTITION BY E.DEPARTMENT_ID)    AS 사원수
+SELECT D.DEPARTMENT_ID                                     AS 부서ID
+     , DEPARTMENT_NAME                                     AS 부서이름
+     , COUNT(E.EMPLOYEE_ID)                                AS 사원수
   FROM DEPARTMENTS D, EMPLOYEES E
  WHERE D.DEPARTMENT_ID = E.DEPARTMENT_ID(+)
+ GROUP BY D.DEPARTMENT_ID, D.DEPARTMENT_NAME
  ORDER BY D.DEPARTMENT_ID;
 
 

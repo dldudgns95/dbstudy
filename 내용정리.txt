@@ -1,0 +1,473 @@
+테이블
+1. 데이터베이스에서 데이터를 저장하는 객체이다.
+2. 표 형식으로 구성된다.
+3. 행(ROW)와 열(COLUMN)의 집합 형태이다
+
+데이터타입 종류
+1. NUMBER(p,s) : 정밀도 p,스케일 s로 표현하는 숫자 형식
+    1)정밀도 p : 전체 유효 숫자의 갯수(디폴트 : 38)
+        ex) 1 , 01 , 001 은 전부 같은 정밀도(1)를 가진다.
+    2)스케일 s : 소수부의 유효 숫자의 갯수(디폴트 : 0)
+        ex) 0.1 , 0.10 은 같은 스케일(1)을 가지고 0.01 은 스케일(2)를 가진다.
+        ex) NUMBER(2,2) = 0.01 ~ 0.99
+2. CHAR(size) : 고정 문자(character)
+    1)글자 수가 고정된 타입 (예시 : 핸드폰번호, 주민번호 등)
+    2)size : 최대 2000 byte 
+3. VARCHAR2(size) : 가변 문자
+    1)글자 수가 고정되지 않은 타입(예시 : 이름, 이메일, 주소 등)
+    2)size : 최대 4000 byte
+4. CLOB : 큰 텍스트 타입
+5. DATE : 날짜와 시간을 동시에 표현하는 타입(년, 월, 일, 시, 분, 초)
+6. TIMESTAMP : 날짜와 시간을 동시에 표현하는 타입(년, 월, 일, 시, 분, 초, 마이크로초(백만분의1초))
+
+테이블 제약조건 5가지
+1. NOT NULL     : 필수
+2. UNIQUE       :중복 불가
+3. PRIMARY KEY  : 기본키
+4. FOREIGN KEY  : 외래키
+5. CHECK        : 값의 제한
+
+
+
+1:M 관계
+1. 2개의 테이블을 관계 짓는 가장 대표적인 관계이다.
+2. 1    :   M
+   PK   :   FK
+   부모 :   자식
+3. 반드시 부모 테이블을 먼저 만들고, 자식 테이블은 나중에 만들어야 한다.
+4. 반드시 자식 테이블을 먼저 지우고, 부모 테이블은 나중에 지워야 한다.
+
+삭제 옵션
+1. ON DELETE CASCADE  : 외래키가 참조하는 기본키 값이 삭제 되면 외래키도 함께 삭제된다.
+2. ON DELETE SET NULL : 외래키가 참조하는 기본키 값이 삭제 되면 외래키를 NULL로 처리한다.
+
+M:N 관계
+1. 현실세계에서 빈번히 나타나지만 주의해야 하는 관계이다.
+2. M:N 관계를 가진 2개의 테이블은 직접 관계를 맺는 것이 불가능하다.
+3. 관계를 맺기 위한 별도의 테이블이 추가로 필요하다.
+4. M:N 관계는 1:M 관계 2개로 구현할 수 있다.
+
+
+
+DDL
+1. Data Definition Language
+2. 데이터베이스 객체를 다루는 언어
+3. 트랜잭션 대상이 아니다.(작업을 취소할 수 없다.)
+    ㄴ트랜잭션 = 반드시 한번에 작업해야 하는 내용
+4. 종류
+    -CREATE   : 생성
+    -ALTER    : 수정
+    -DROP     : 삭제
+    -TRUNCATE : 삭제(내용(ROW)만 삭제)
+
+테이블 수정하기
+1. 칼럼 추가   : ALTER TABLE [테이블명] ADD [칼럼명] [데이터타입] [제약조건]
+2. 칼럼 수정   : ALTER TABLE [테이블명] MODIFY [칼럼명] [데이터타입] [제약조건]
+3. 칼럼 삭제   : ALTER TABLE [테이블명] DROP COLUMN [칼럼명]
+4. 칼럼 이름   : ALTER TABLE [테이블명] RENAME COLUMN [기존 칼럼명] TO [신규 칼럼명]
+5. 테이블 이름 : ALTER TABLE [테이블명] RENAME TO [신규 테이블명]
+6. PK/FK 제약조건
+    1)PK
+        (1) 추가
+            ALTER TABLE [테이블명] ADD CONSTRAINT [제약조건명] PRIMARY KEY(칼럼명)
+        (2) 삭제
+            ALTER TABLE [테이블명] DROP CONSTRAINT [제약조건명]
+            ALTER TABLE [테이블명] DROP PRIMARY KEY
+    2)FK
+        (1) 추가
+            ALTER TABLE [자식 테이블명] ADD CONSTRAINT [제약조건명] FOREIGN KEY(칼럼명) REFERENCES [부모테이블명](참조할 칼럼)
+        (2) 삭제
+            ALTER TABLE [테이블명] DROP CONSTRAINT [제약조건명]
+        (3) 일시중지
+            ALTER TABLE [테이블명] DISABLE CONSTRAINT [제약조건명]
+        (4) 활성화
+            ALTER TABLE [테이블명] ENABLE CONSTRAINT [제약조건명]
+
+
+
+DML
+1. Data Manipulation Language
+2. 데이터(Row)를 조작(삽입, 수정, 삭제)하는 언어이다.
+3. 트랜잭션의 대상이다.(작업이 완료되면 COMMIT, 작업을 취소하려면 ROLLBACK이 필요하다.)
+    1) COMMIT   : 작업을 저장한다. COMMIT이 완료된 작업은 ROLLBACK으로 취소할 수 없다. 
+    2) ROLLBACK : 작업을 취소한다. COMMIT 이후 작업을 취소한다.
+4. 종류
+    1) 삽입 : INSERT INTO VALUES
+    2) 수정 : UPDATE SET WHERE
+    3) 삭제 : DELETE FROM WHERE
+
+부서번호 시퀀스 만들기
+CREATE SEQUENCE DEPT_SEQ
+    INCREMENT BY 1     -- 1씩 증가하는 번호를 만든다.(디폴트)
+    START WITH 1       -- 1부터 번호를 만든다.(디폴트)
+    NOMAXVALUE         -- 번호의 상한선이 없다.(디폴트)
+    NOMINVALUE         -- 번호의 하한선이 없다.(디폴트)
+    NOCYCLE            -- 번호순환이 없다.(디폴트)
+    CACHE 20           -- 20개씩 번호를 미리 만들어 둔다.(디폴트)
+    NOORDER            -- 번호를 순서대로 사용하지 않는다.(디폴트) - 번호를 순서대로 사용하는 ORDER 옵션으로 바꿔서 시퀀스를 생성한다.
+;
+
+삽입(INSERT)
+    INSERT 
+      INTO 테이블명(칼럼1, 칼럼2, 칼럼3 ...)
+    VALUES(칼럼1 값, 칼럼2 값, 칼럼3 값 ...)
+
+수정(UPDATE)
+    UPDATE 테이블명
+       SET 업데이트할 내용,업데이트할 내용
+     WHERE 조건식
+
+삭제(DELETE)
+    DELETE
+      FROM 테이블명	
+     WHERE 조건
+
+
+
+연산자 종류
+
+산술연산자
++, -, *, /
+
+NULL 비교 연산자
+IS NULL
+IN NOT NULL
+
+대입연산자
+=
+
+비교연산자
+>, >=, <, <=, =, !=,<>
+
+논리연산자
+AND, OR, NOT
+
+기타 연산자
+BETWEEN A AND B		: A와 B에 속하는 모든 값
+NOT BETWEEN A AND B	: A와 B에 속하지 않는 모든 값
+IN(A, B, C)		: A, B, C중 하나임
+NOT IN(A, B, C)		: A, B, C 모두 아님
+LIKE 패턴		: 패턴과 일치함
+NOT LIKE 패턴		: 패턴과 일치하지 않음
+A || B			: A와 B를 연결
+
+와일드카드
+%			: 모든 문자를 의미, 글자수에 제한 없음
+_(밑줄)			: 모든 문자를 의미, 1글자로 제한됨
+
+패턴 예시
+김%			:'김'으로 시작하는 모든 패턴	ex) 김, 김치, 김민서 등
+%김			:'김'으로 끝나는 모든 패턴	ex) 김, 돌김 등
+%김%			:'김'을 포함한 모든 패턴	ex) 김, 김치, 돌김 등
+
+
+DUAL 테이블
+1. DUMMY 칼럼 1개를 가지고 있는 테이블이다.
+2. 'X'값을 가지고 있다.
+3. FROM절이 필요 없는 SELECT문을 사용할 때 DUAL 테이블을 이용한다.
+
+형 변환 함수
+
+1. 문자 -> 숫자로 변환하기
+    TO_NUMBER(문자열)
+2. 숫자 -> 문자로 변환하기
+    TO_CHAR(숫자, [형식])
+3. 날짜 -> 문자로 변환하기
+    TO_CHAR(날짜, [형식])
+        
+     날짜/시간 형식
+    1) YY   : 년도 2자리
+    2) YYYY : 년도 4자리
+    3) MM   : 월 2자리(01~12)
+    4) DD   : 일 2자리(01~31)
+    5) AM   : 오전 / 오후
+    6) HH   : 12시각(01~12)
+    7) HH24 : 24시각(00~23)
+    8) MI   : 분(00~59)
+    9) SS   : 초(00~59)
+
+4. 문자 -> 날짜로 변환하기
+    TO_DATE(문자,[형식])
+     
+주요 날짜 함수
+SYSDATE, SYSTIMESTAMP				: 현재 날짜와 시간
+TO_CHAR((SYSDATE OR SYSTIMESTAMP,형식)		: 현재 날짜와 시간  형식지정
+TO_DATE((문자,형식)				: 문자로 된 날짜/시간을 실제 날짜/시간 타입으로 변환
+-- 날짜 비교는 TO_DATE를 다 써주는게 좋다.
+
+
+NULL 처리 함수
+1. NVL(표현식, 표현식의 결과가 NULL인 경우에 사용할 값)
+2. NVL2(표현식, 표현식의 결과가 NULL이 아닌 경우에 사용할 값, 표현식의 결과가 NULL인 경우에 사용할 값)
+
+통계 함수
+    1. SUM(표현식)   : 합계
+    2. AVG(표현식)   : 평균
+    3. MAX(표현식)   : 최댓값
+    4. MIN(표현식)   : 최소값
+    5. COUNT(표현식) : 갯수
+
+수학함수
+1. 절대값		: ABS(숫자)		-- 숫자의 절대값
+2. 제곱근		: SQRT(숫자)		-- 숫자의 루트
+3. 부호 판별		: SIGN(숫자)		-- 숫자가 양수면 1, 음수는 -1, 0이면 0 반환
+4. 제곱			: POWER(숫자1,숫자2)	-- 숫자1의 숫자2 제곱
+5. 나머지		: MOD(숫자1,숫자2)	-- 숫자1을 숫자2로 나눈 나머지
+6. 정수로 올림		: CEIL(1.99)		-- 1.99보다 큰 정수
+7. 정수로 내림		: FLOOR(2.01)		-- 2.01보다 작은 정수
+8. 원하는 자릿수로 반올림	: ROUND(12.34)		-- 정수로 반올림
+			  ROUND(12.345)		-- 소수 2자리로 반올림
+9. 원하는 자릿수로 절사	:  TRUNC(12.34)		-- 정수로 절사
+			  TRUNC(12.345,2)	-- 소수 2자리로 절사
+
+날짜시간 함수
+1. 현재 날짜 및 시간
+	1)SYSDATE, SYSTIMESTAMP 		: 오라클에 설치된 시간 기준
+	2)CURRENT_DATE, CURRENT_TIMESTAMP 	: 세션타임존 시간 기준
+2. 날짜를 원하는 형식으로 조회
+	TO_CHAR(SYSDATE, 'YYYY-MM-DD')
+	TO_CHAR(SYSTIMESTAMP, 'YYYY-MM-DD AM HH:MI:SS')
+3. DATE 형식의 날짜 연산
+	TO_CHAR(SYSDATE + 1/24/60/60, 'YYYY-MM-DD AM HH:MI:SS')		-- 1초 후
+4. TIMESTAMP 형식의 날짜 연산
+	SYSTIMESTAMP + INTERVAL '1' SECOND				-- 1초 후
+5. 필요한 단위 추출
+	EXTRACT(SECOND FROM SYSTIMESTAMP)				-- 초
+6. 요일을 기준으로 특정 날짜 구하기
+	NEXT_DAY(SYSDATE - 8, '수')      				-- 지난 수요일(SYSDATE-7이 아님을 주의)
+7. N개월 전후 날짜 구하기
+	ADD_MONTHS(SYSDATE, 1)						-- 1개월 후
+8. 경과한 개월 수 확인하기
+	MONTHS_BETWEEN(SYSDATE, TO_DATE('23/01/01', 'YY/MM/DD')
+
+문자열 함수
+1. 대소문자 변환
+	UPPER(칼럼명)				-- 모두 대문자
+	LOWER(칼럼명)				-- 모두 소문자
+	INITCAP(칼럼명)				-- 첫 글자만 대문자
+2. 글자 수
+	LENGTH(칼럼명)
+3. 바이트 수
+	LENGTHB(칼럼명)
+4. 연결하기
+	CONCAT(A, B)
+	||연산자(오라클 한정)
+5.일부만 반환하기
+	SUBSTR(칼럼명,1,3)			-- 칼럼명에서 1번째 글자부터 3글자를 반환
+6. 특정 문자의 위치 반환
+	INSTR(칼럼명,'A')			-- 칼럼명에서 A의 위치 반환
+7. 바꾸기
+	REPLACE(칼럼명,'A','S')			-- 칼럼명에 있는 모든 'A'를 'S'로 변경
+8. 채우기
+	LPAD(표현식,전체폭,채울문자)		-- 왼쪽에서 채우기
+	RPAD(표현식,전체폭,채울문자)		-- 오른쪽에서 채우기
+9. 공백 제거
+	LTRIM(표현식)				-- 왼쪽 공백 제거
+	RTRIM(표현식)				-- 오른쪽 공백 제거
+	TRIM(표현식)				-- 왼쪽/오른쪽 공백 제거
+
+기타 함수
+1. 순위 구하기 ( 동점자는 같은 순위를 가짐)
+	RANK() OVER(ORDER BY 칼럼 ASC)		-- 오름차순
+	RANK() OVER(ORDER BY 칼럼 DESC)		-- 내림차순
+2. 행 번호 구하기(동점자 처리방식 없음)
+	ROW_NUMBER() OVER(ORDER BY 칼럼명 DESC)
+
+
+DQL
+SELECT 칼럼명 AS 별칭
+  FROM 테이블명
+
+중복제거
+SELECT DISTINCT 칼럼명
+  FROM 테이블명
+
+조건 추가
+SELECT 칼럼명
+  FROM 테이블명
+ WHERE 조건
+
+오름차순, 내림차순
+SELECT 칼럼명 AS 별칭
+  FROM 테이블명
+ ORDER BY 칼럼명 [ASC, DESC]    	--칼럼명 기준으로 오름차순(ASC), 내림차순(DESC)으로 정렬. 아무것도 안쓰면 오름차순 정렬
+
+
+GROUP BY 절
+1. 같은 값을 가진 데이터들을 하나의 그룹으로 묶어서 처리한다.
+2. 통계를 내는 목적으로 사용한다.(합계, 평균, 최댓값, 최솟값, 갯수 등)
+3. SELECT절에서 조회하려는 칼럼은 "반드시" GROUP BY 절에 명시되어 있어야 한다.
+
+SELECT 칼럼명A            -- GROUP BY 절에서 지정한 칼럼만 조회할 수 있다.
+     , COUNT(*)
+  FROM 테이블명
+ GROUP BY 칼럼명A;
+
+HAVING 절
+1. GROUP BY 절 이후에 나타난다.
+2. GROUP BY 절을 이용한 조회결과에 조건을 지정하는 경우에 사용한다.
+3. GROUP BY 절이 필요하지 않는 조건은 WHERE 절로 지정한다.
+
+SELECT 문의 실행 순서
+    
+SELECT 칼럼       5
+  FROM 테이블     1	(+ JOIN)
+ WHERE 조건       2
+ GROUP BY 그룹    3
+HAVING 그룹조건   4 
+ ORDER BY 정렬    6
+
+조인(JOIN)
+1. 2개 이상의 테이블을 한번에 조회하는 방식이다.
+2. 각 테이블의 관계(1:M)를 이용해서 조인 조건을 만든다.
+3. 조인 종류
+    1) 내부 조인 : 2개 테이블에 모두 존재하는 데이터만 조회하는 방식
+    2) 외부 조인 : 2개 테이블에 모두 존재하지 않더라도 조회하는 방식
+
+
+드라이브 테이블 VS 드리븐 테이블
+    
+1. 드라이브 테이블
+    1) 조인 관계를 처리하는 메인 테이블
+    2) 1:M 관계에서 1에 해당하는 테이블
+    3) 일반적으로 데이터의 갯수가 적다.
+    4) PK를 조인 조건으로 사용하기 때문에 인덱스(INDEX) 사용이 가능 (빠르다는 의미)
+2. 드리븐 테이블
+    1) 1:M 관계에서 M에 해당하는 테이블
+    2) 일반적으로 데이터의 갯수가 많다.
+    3) FK를 조인 조건으로 사용하기 때문에 인덱스(INDEX) 사용이 불가능 (느리다는 의미)
+3. 드라이브 테이블을 드리블 테이블보다 먼저 작성하면 성능에 도움이 된다.
+
+
+내부 조인
+-ASNI 형식
+SELECT 칼럼명
+  FROM 테이블명A A INNER JOIN 테이블명B B
+    ON A.칼럼명 = B.칼럼명;
+
+-ORACLE 형식
+SELECT 칼럼명
+  FROM 테이블명A A, 테이블명B B
+ WHERE A.칼럼명 = B.칼럼명;
+
+외부 조인
+-ANSI 형식
+SELECT 칼럼명
+  FROM 테이블명A A [LEFT OR RIGHT] OUTER JOIN 테이블명B B		-- LEFT OUTER JOIN  : 왼쪽 테이블은 전체 포함, 오른쪽 테이블을 일치하는 값만 포함
+    ON A.칼럼명 = B.칼럼명;						-- RIGHT OUTER JOIN : 오른쪽 테이블은 전체 포함, 왼쪽 테이블을 일치하는 값만 포함
+
+-ORACLE 형식
+SELECT 칼럼명
+  FROM 테이블명A A LEFT OUTER JOIN 테이블명B B				-- LEFT OUTER JOIN 인 경우 	: 오른쪽 조건식에(+) 추가
+    ON A.칼럼명 = B.칼럼명(+);						-- RIGHT OUTER JOIN 인 경우	: 왼쪽 조건식에(+) 추가
+
+
+셀프 조인
+- 하나의 테이블내에 있는 칼럼끼리 연결하는 조인 방식
+- 조인 대상 테이블이 하나뿐이라는 것을 제외하면 일반적인 조인과 다를 바 없음
+- 하나의 테이블에 각각 다른 별명을 붙여서 처리
+
+
+
+서브쿼리(Sub Query)
+1. 메인쿼리에 포함되는 하위 쿼리를 서브쿼리라고 한다.
+2. 서브쿼리를 먼저 실행해서 그 결과를 메인쿼리에 전달한다.
+3. 종류
+    1) SELECT 절 : 스칼라 서브쿼리
+    2)   FROM 절 : 인라인 뷰 (INLINE VIEW)
+    3)  WHERE 절 : 단일 행 서브쿼리 (결과가 1개)
+                   다중 행 서브쿼리 (결과가 N개)
+
+
+단일 행 서브쿼리(Single Row Sub Query)
+1. 결과가 1행이다. (1개이다.)
+2. 단일 행 서브쿼리인 경우
+    1) WHERE 절에서 사용한 칼럼이 PK 또는 UNIQUE 칼럼인 경우
+    2) 통계 함수를 사용한 경우    ex)SELECT COUNT(*) FROM EMPLOYEES
+3. 단일 행 서브쿼리 연산자
+    =, !=, >, >=, <, <=
+
+EX) --1. 사원번호가 101인 사원의 직업과 동일한 직업을 가진 사원을 조회하시오.
+SELECT *
+  FROM EMPLOYEES
+ WHERE JOB_ID = (SELECT JOB_ID
+                   FROM EMPLOYEES
+                  WHERE EMPLOYEE_ID = 101);
+
+    
+다중 행 서브쿼리(Multiple Row Sub Query)
+1. 결과가 N행이다. (N개이다.)
+2. 다중 행 서브쿼리 연산자
+    IN, ANY, ALL 등
+
+EX) --2. 부서명이 'IT'인 부서에 근무하는 사원 조회하기.
+SELECT *
+  FROM EMPLOYEES
+ WHERE DEPARTMENT_ID IN (SELECT DEPARTMENT_ID
+                          FROM DEPARTMENTS
+                         WHERE DEPARTMENT_NAME = 'IT');     -- 서브쿼리의 DEPARTMENT_NAME 칼럼은 중복이 있을 수 있으므로 다중 행 서브쿼리로 처리한다.
+
+
+
+FROM 절의 서브쿼리 (인라인 뷰)
+EX)	--1. 연봉이 3번째로 높은 사원 조회하기
+SELECT 행번호, EMPLOYEE_ID
+  FROM (SELECT ROW_NUMBER() OVER(ORDER BY SALARY DESC) AS 행번호
+             , EMPLOYEE_ID
+          FROM EMPLOYEES)
+ WHERE 행번호 = 3;
+
+SELECT 절의 서브쿼리 (스칼라 서브쿼리)
+EX)	-- 부서번호가 50인 부서에 근무하는 사원번호, 사원명, 부서명 조회하기 (비상관)
+SELECT EMPLOYEE_ID
+     , FIRST_NAME
+     , LAST_NAME
+     , (SELECT DEPARTMENT_NAME 
+          FROM DEPARTMENTS
+         WHERE DEPARTMENT_ID = 50) AS DEPT_NAME
+  FROM EMPLOYEES
+ WHERE DEPARTMENT_ID = 50;
+
+-- 부서번호가 50인 부서에 근무하는 사원번호, 사원명, 부서명 조회하기 (상관)
+SELECT E.EMPLOYEE_ID
+     , E.FIRST_NAME
+     , E.LAST_NAME
+     , (SELECT D.DEPARTMENT_NAME
+          FROM DEPARTMENTS D
+         WHERE D.DEPARTMENT_ID = E.DEPARTMENT_ID
+           AND D.DEPARTMENT_ID = 50) AS DEPT_NAME
+  FROM EMPLOYEES E;
+
+
+
+WITH
+1. 자주 사용하거나 복잡한 쿼리문을 WITH절의 코드 블록으로 등록시켜 놓을 수 있다.
+2. WITH절의 코드 블록은 임시로 저장되기 때문에 곧바로 사용해야 한다.
+3. 쿼리문의 가독성이 좋아진다.
+
+EX)--1. 1 ~ 10번째로 고용된 사원 조회하기
+--1) 서브쿼리
+SELECT EMPLOYEE_ID
+     , HIRE_DATE
+     , RN
+  FROM (SELECT EMPLOYEE_ID
+             , HIRE_DATE
+             , ROW_NUMBER() OVER(ORDER BY HIRE_DATE ASC) AS RN
+          FROM EMPLOYEES)
+ WHERE RN BETWEEN 1 AND 10;
+
+
+--2) WITH
+WITH
+    MY_SUBQUERY AS (
+        SELECT ROW_NUMBER() OVER(ORDER BY HIRE_DATE ASC) AS RN
+             , EMPLOYEE_ID
+             , HIRE_DATE
+          FROM EMPLOYEES
+)
+SELECT EMPLOYEE_ID
+     , HIRE_DATE
+     , RN
+  FROM MY_SUBQUERY
+ WHERE RN BETWEEN 1 AND 10;
+ 

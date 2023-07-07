@@ -10,7 +10,7 @@ HAVING 절
 
 SELECT 문의 실행 순서  
     SELECT 칼럼       5
-      FROM 테이블     1
+      FROM 테이블     1	(+JOIN)
      WHERE 조건       2
      GROUP BY 그룹    3
     HAVING 그룹조건   4 

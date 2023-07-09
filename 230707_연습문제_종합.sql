@@ -194,9 +194,9 @@ SELECT U.USER_ID
 SELECT USER_ID
      , USER_NAME
      , COUNT(B.BUY_NO)
-  FROM BUY_T B FULL OUTER JOIN USER_T U
+  FROM BUY_T B RIGHT OUTER JOIN USER_T U
     ON B.USER_NO = U.USER_NO
- GROUP BY USER_ID,USER_NAME
+ GROUP BY USER_ID, USER_NAME
  ORDER BY USER_ID;
 
 -- 11. 카테고리가 '전자'인 제품을 구매한 고객의 구매내역을 조회하시오.
@@ -221,13 +221,6 @@ SELECT USER_NAME
     ON B.USER_NO = U.USER_NO
  WHERE PROD_CATEGORY = '전자'; 
 
-SELECT *
-  FROM USER_T;
-SELECT *
-  FROM BUY_T;
-SELECT *
-  FROM PRODUCT_T;
-
 
 -- 12. 모든 제품의 제품명과 판매횟수를 조회하시오. 판매 이력이 없는 제품은 0으로 조회하시오.
 -- 제품명  판매횟수
@@ -240,9 +233,17 @@ SELECT *
 -- 벨트    0개
 
 SELECT PROD_NAME
-     , NVL(BUY_AMOUNT,0) || '개'
-  FROM PRODUCT_T P LEFT OUTER JOIN BUY_T B
-    ON P.PROD_CODE = B.PROD_CODE;
+     , NVL(COUNT(B.PROD_CODE),0) || '개'
+  FROM PRODUCT_T P  LEFT OUTER JOIN BUY_T B
+    ON P.PROD_CODE = B.PROD_CODE
+ GROUP BY PROD_NAME;
+ 
+ SELECT *
+  FROM USER_T;
+SELECT *
+  FROM BUY_T;
+SELECT *
+  FROM PRODUCT_T;
 
 
 -- 13. 제품을 구매한 이력이 있는 고객의 아이디, 고객명, 구매횟수, 총구매액을 조회하시오.
@@ -252,14 +253,27 @@ SELECT PROD_NAME
 -- KJD     김제동  1         75
 -- LHJ     이휘재  2         80
 -- KHD     강호동  3         1210
-
-
+SELECT USER_ID AS 아이디
+     , USER_NAME AS 고객명
+     , COUNT(B.USER_NO) AS 구매횟수
+     , SUM(BUY_AMOUNT * PROD_PRICE) AS 총구매액
+  FROM PRODUCT_T P RIGHT OUTER JOIN BUY_T B
+    ON P.PROD_CODE = B.PROD_CODE LEFT OUTER JOIN USER_T U
+    ON B.USER_NO = U.USER_NO
+ GROUP BY USER_ID, USER_NAME;
+ 
+ 
 -- 14. 구매횟수가 2회 이상인 고객명과 구매횟수를 조회하시오.
 -- 고객명  구매횟수
 -- 이휘재  2
 -- 박수홍  3
 -- 강호동  3
-
+SELECT USER_NAME
+     , COUNT(B.USER_NO)
+  FROM BUY_T B LEFT OUTER JOIN USER_T U
+    ON B.USER_NO = U.USER_NO
+ GROUP BY USER_NAME
+HAVING COUNT(B.USER_NO) >= 2;
 
 -- 15. 어떤 고객이 어떤 제품을 구매했는지 조회하시오. 구매 이력이 없는 고객도 조회하고 아이디로 오름차순 정렬하시오.
 -- 고객명   구매제품
@@ -279,17 +293,41 @@ SELECT PROD_NAME
 -- 신동엽   NULL
 -- 유재석   NULL
 
+SELECT USER_NAME
+     , PROD_NAME
+  FROM PRODUCT_T P RIGHT OUTER JOIN BUY_T B
+    ON P.PROD_CODE = B.PROD_CODE RIGHT OUTER JOIN USER_T U
+    ON B.USER_NO = U.USER_NO
+ ORDER BY USER_ID;
 
 -- 16. 제품 테이블에서 제품명이 '책'인 제품의 카테고리를 '서적'으로 수정하시오.
-
+UPDATE PRODUCT_T
+   SET PROD_NAME = '서적'
+ WHERE PROD_NAME = '책';
 
 -- 17. 연락처1이 '011'인 사용자의 연락처1을 모두 '010'으로 수정하시오.
+UPDATE USER_T
+   SET USER_MOBILE1 = '010'
+ WHERE USER_MOBILE1 = '011';
 
 
 -- 18. 구매번호가 가장 큰 구매내역을 삭제하시오.
+DELETE
+  FROM BUY_T
+ WHERE BUY_NO = (SELECT MAX(BUY_NO)
+                   FROM BUY_T);
 
 
 -- 19. 제품코드가 1인 제품을 삭제하시오. 삭제 이후 제품번호가 1인 제품의 구매내역이 어떻게 변하는지 조회하시오.
+DELETE
+  FROM PRODUCT_T
+ WHERE PROD_CODE = 1;
 
 
 -- 20. 사용자번호가 5인 사용자를 삭제하시오. 사용자번호가 5인 사용자의 구매 내역을 먼저 삭제한 뒤 진행하시오.
+DELETE
+  FROM BUY_T
+ WHERE USER_NO = 5;
+DELETE
+  FROM USER_T
+ WHERE USER_NO = 5;

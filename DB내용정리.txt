@@ -184,6 +184,20 @@ DUAL 테이블
     TO_NUMBER(문자열)
 2. 숫자 -> 문자로 변환하기
     TO_CHAR(숫자, [형식])
+
+   숫자 형식
+   1) '99999' : 지정된 '9'의 개수가 나타낼 숫자의 길이
+   2) ,(콤마) : 지정된 위치에 ','를 나타낸다.
+   3) '00000' : 자릿 수 만큼 0을 출력
+   ex)
+	SELECT TO_CHAR(1234),
+       	       TO_CHAR(1234, '999999'),     --'  1234'
+       	       TO_CHAR(1234, '000000'),     --'001234'
+               TO_CHAR(1234, '9,999'),      --' 1,234'
+               TO_CHAR(12345, '9,999'),     --'######' 숫자는 5자리인데, 형식은 4자리만 지정되었다.
+               TO_CHAR(12345,'99,999')      --'12,345'
+          FROM DUAL;   
+
 3. 날짜 -> 문자로 변환하기
     TO_CHAR(날짜, [형식])
         
@@ -220,17 +234,17 @@ NULL 처리 함수
     5. COUNT(표현식) : 갯수
 
 수학함수
-1. 절대값		: ABS(숫자)		-- 숫자의 절대값
-2. 제곱근		: SQRT(숫자)		-- 숫자의 루트
-3. 부호 판별		: SIGN(숫자)		-- 숫자가 양수면 1, 음수는 -1, 0이면 0 반환
-4. 제곱			: POWER(숫자1,숫자2)	-- 숫자1의 숫자2 제곱
-5. 나머지		: MOD(숫자1,숫자2)	-- 숫자1을 숫자2로 나눈 나머지
-6. 정수로 올림		: CEIL(1.99)		-- 1.99보다 큰 정수
-7. 정수로 내림		: FLOOR(2.01)		-- 2.01보다 작은 정수
+1. 절대값			: ABS(숫자)		-- 숫자의 절대값
+2. 제곱근			: SQRT(숫자)		-- 숫자의 루트
+3. 부호 판별			: SIGN(숫자)		-- 숫자가 양수면 1, 음수는 -1, 0이면 0 반환
+4. 제곱				: POWER(숫자1,숫자2)	-- 숫자1의 숫자2 제곱
+5. 나머지			: MOD(숫자1,숫자2)	-- 숫자1을 숫자2로 나눈 나머지
+6. 정수로 올림			: CEIL(1.99)		-- 1.99보다 큰 정수
+7. 정수로 내림			: FLOOR(2.01)		-- 2.01보다 작은 정수
 8. 원하는 자릿수로 반올림	: ROUND(12.34)		-- 정수로 반올림
-			  ROUND(12.345)		-- 소수 2자리로 반올림
-9. 원하는 자릿수로 절사	:  TRUNC(12.34)		-- 정수로 절사
-			  TRUNC(12.345,2)	-- 소수 2자리로 절사
+			  	  ROUND(12.345)		-- 소수 2자리로 반올림
+9. 원하는 자릿수로 절사		: TRUNC(12.34)		-- 정수로 절사
+			  	  TRUNC(12.345,2)	-- 소수 2자리로 절사
 
 날짜시간 함수
 1. 현재 날짜 및 시간
@@ -482,3 +496,105 @@ SELECT EMPLOYEE_ID
      , RN
   FROM MY_SUBQUERY
  WHERE RN BETWEEN 1 AND 10;
+
+
+
+ 집합
+1. 2개 이상의 테이블을 한번에 조회하는 방식 중 하나이다.
+2. 모든 SELECT 절의 칼럼 순서와 타입이 일치해야 한다.
+3. 종류
+    1) UNION        : 합집합, 중복 값은 1번만 조회
+    2) UNION ALL    : 합집합, 중복 값도 그대로 조회
+    3) INTERSECT    : 교집합, 중복 값은 1번만 조회
+    4) MINUS        : 차집합, 첫 번째 SELECT 결과에서 두 번째 SELECT 결과를 뺀다.
+4. 형식
+    SELECT 칼럼1, 칼럼2 ...
+      FROM 테이블1
+    집합연산자
+    SELECT 칼럼1, 칼럼2
+      FROM 테이블2
+    [ORDER BY 정렬]
+
+
+
+
+인덱스
+1. 빠른 조회를 지원하는 데이터베이스 객체이다.
+2. 어떤 데이터가 어떤 ROWID를 가지고 있는지 알고 있다.
+3. 기본키(PK)와 중복이 없는 칼럼(UNIQUE)은 자동으로 인덱스가 만들어진다.
+4. 인덱스가 많으면 데이터의 삽입/수정/삭제 시 인덱스도 함께 갱신해야 하기 때문에 전체적인 성능이 떨어질 수 있다.
+5. 인덱스 칼럼을 그대로 사용하지 않고 함수를 적용해서 사용하면 인덱스를 타지 않는다.
+
+
+SELECT문 실행의 이해	ex)SELECT * FROM EMPLOYEES WHERE EMPLOYEE_ID = 150;
+1. SQL문 파싱(구문분석) 진행
+2. DB 버퍼캐시에서 EMPLOYEE_ID 가 150 인 정보가 있는지 확인한다.
+(DB 버퍼캐시 = 데이터 파일에서 읽은 데이터블록 복사본을 보관하는 공간으로 오라클이 데이터를 읽고 수정하기 위해 디스크에 존재하는 데이터를 읽어 저장하는 메모리 공간이다.)
+3. DB 버퍼캐시에 없으면 디스크 파일에서 EMPLOYEE_ID 가 150 인 정보를 찾아서 DB 버퍼캐시에 저장한 뒤 결과를 출력한다.
+4. 디스크 파일에서 EMPLOYEE_ID 가 150 인 정보를 찾을 때 EMPLOYEE_ID 칼럼의 인덱스 유무에 따라 다음과 같이 동작이 달라진다.
+	1)인덱스 (INDEX) 가 있는 경우
+	  인덱스에서 150 인 정보가 어떤 ROWID 를 가지고 있는지 확인 후 해당 블록만 DB 버퍼캐시에 복사한다.
+	2)인덱스 (INDEX) 가 없는 경우
+	  150 인 정보가 어디 있는지 모르기 때문에 모든 데이터를 DB 버퍼캐시에 복사한다.
+
+인덱스 정보가 저장되어 있는 데이터 사전(이미 만들어져 있는 테이블)
+- DBA_INDEXES, USER_INDEXES, ALL_INDEXES
+
+인덱스가 설정된 칼럼 정보가 저장되어 있는 데이터 사전
+- DBA_IND_COLUMNS, USER_IND_COLUMNS, ALL_IND_COLUMNS
+
+부서 테이블의 부서명(DEPARTMENT_NAME)칼럼에 인덱스 설정하기
+CREATE INDEX DEPT_NAME_IX
+    ON DEPARTMENTS (DEPARTMENT_NAME);
+    
+인덱스 DEPT_NAME_IX 삭제하기
+DROP INDEX DEPT_NAME_IX;
+
+데이터 사전
+1. 특정 데이터의 정보를 담고 있는 객체이다.
+2. 시스템 카탈로그, 메타 데이터라고도 한다.
+3. 계정 유형별로 관리한다.
+    1) DBA_     
+    2) USER_
+    3) ALL_ 
+
+
+ROWID
+1. 오라클에서 제공하는 가상 칼럼(PSEUDO COLUMN)이다.
+2. 어떤 행이 어디에 저장되어 있는지 알고 있는 칼럼이다.
+3. 실제 저장된 물리적 저장위치를 확인할 수 있다.
+
+ROWID를 이용한 조회
+1. 오라클에서 가장 빠른 조회이다.
+2. 실제로 사용하기가 불가능하다. 대신 인덱스를 사용한다.
+
+
+
+
+뷰(View)
+1. 하나 이상의 기본 테이블이나 다른 뷰 (view) 를 이용하여 생성하는 가상 테이블
+2. 디스크에 저장한 테이블이 아닌 쿼리만 저장해 둔 형태를 가짐
+3. 생성된 뷰는 SELECT 문을 활용해서 테이블처럼 사용할 수 있음
+
+뷰 장점
+1. 복잡한 쿼리를 단순하게 호출
+2. 뷰 사용으로 인한 DB 성능상 이점은 없음
+
+
+뷰 만들기
+CREATE VIEW V_EMP AS (
+SELECT E.EMPLOYEE_ID, E.FIRST_NAME, E.LAST_NAME, E.JOB_ID, D.DEPARTMENT_ID, D.DEPARTMENT_NAME, D.LOCATION_ID
+  FROM DEPARTMENTS D INNER JOIN EMPLOYEES E
+    ON D.DEPARTMENT_ID = E.DEPARTMENT_ID
+);
+
+ex)1. 사원번호, 사원명, 부서번호, 부서명, 지역번호, 도로명 주소를 조회하시오.
+SELECT V.EMPLOYEE_ID, V.FIRST_NAME, V.LAST_NAME, V.DEPARTMENT_ID, V.DEPARTMENT_NAME, L.LOCATION_ID, L.STREET_ADDRESS
+  FROM LOCATIONS L INNER JOIN V_EMP V
+    ON L.LOCATION_ID = V.LOCATION_ID;
+
+ex)2. 사원번호, 사원명, 직무번호, 직무이름(JOB_TITLE)을 조회하시오.
+SELECT V.EMPLOYEE_ID, V.FIRST_NAME, V.LAST_NAME, J.JOB_ID, J.JOB_TITLE
+  FROM JOBS J INNER JOIN V_EMP V
+    ON J.JOB_ID = V.JOB_ID
+ ORDER BY V.EMPLOYEE_ID;

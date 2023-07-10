@@ -37,7 +37,7 @@
 3. 반드시 부모 테이블을 먼저 만들고, 자식 테이블은 나중에 만들어야 한다.
 4. 반드시 자식 테이블을 먼저 지우고, 부모 테이블은 나중에 지워야 한다.
 
-삭제 옵션
+삭제 옵션(FK 제약에 쓰임)
 1. ON DELETE CASCADE  : 외래키가 참조하는 기본키 값이 삭제 되면 외래키도 함께 삭제된다.
 2. ON DELETE SET NULL : 외래키가 참조하는 기본키 값이 삭제 되면 외래키를 NULL로 처리한다.
 
@@ -106,6 +106,18 @@ CREATE SEQUENCE DEPT_SEQ
     CACHE 20           -- 20개씩 번호를 미리 만들어 둔다.(디폴트)
     NOORDER            -- 번호를 순서대로 사용하지 않는다.(디폴트) - 번호를 순서대로 사용하는 ORDER 옵션으로 바꿔서 시퀀스를 생성한다.
 ;
+
+시퀀스 함수
+INSERT 문이나 UPDATE 문에서 사용
+서브쿼리 , GROUP BY, HAVING, ORDER BY, DISTINCT 와 함께 사용할 수 없음
+
+시퀀스 함수 종류
+-CURRVAL : 시퀀스로 생성한 현재 번호를 확인
+	   NEXTVAL 함수 호출이 한 번도 없는 경우 사용할 수 없음
+-NEXTVAL : 시퀀스로 새로운 번호를 생성
+	   최초 시퀀스 사용 시 반드시 NEXTVAL 함수를 먼저 사용해야 함
+
+
 
 삽입(INSERT)
     INSERT 
@@ -470,5 +482,3 @@ SELECT EMPLOYEE_ID
      , RN
   FROM MY_SUBQUERY
  WHERE RN BETWEEN 1 AND 10;
- 
-

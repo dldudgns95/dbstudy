@@ -1,3 +1,24 @@
+DB 계정 만들기
+새로운 계정 만드는 방법
+CREATE USER 아이디 IDENTIFIED BY 비밀번호;
+
+계정 권한 생성
+GRANT CONNECT TO 아이디;
+
+계정 권한 삭제
+REVOKE (권한) FROM 아이디;
+
+기존계정 삭제 방법
+1.계정이 가진 데이터가 없을 때 : DROP USER 아이디;
+2.계정이 가진 데이터가 있을 때 : DROP USER 아이디 CASCADE;
+
+--새로운 계정을 만드는 전체 스크립트
+ALTER SESSION SET "_ORACLE SCRIPT" = TRUE;
+DROP USER GD CASCADE;
+CREATE USER GD IDENTIFIED BY 1111;
+GRANT DBA TO GD;
+
+
 테이블
 1. 데이터베이스에서 데이터를 저장하는 객체이다.
 2. 표 형식으로 구성된다.
@@ -242,7 +263,7 @@ NULL 처리 함수
 6. 정수로 올림			: CEIL(1.99)		-- 1.99보다 큰 정수
 7. 정수로 내림			: FLOOR(2.01)		-- 2.01보다 작은 정수
 8. 원하는 자릿수로 반올림	: ROUND(12.34)		-- 정수로 반올림
-			  	  ROUND(12.345)		-- 소수 2자리로 반올림
+			  	  ROUND(12.345, 2)	-- 소수 2자리로 반올림
 9. 원하는 자릿수로 절사		: TRUNC(12.34)		-- 정수로 절사
 			  	  TRUNC(12.345,2)	-- 소수 2자리로 절사
 

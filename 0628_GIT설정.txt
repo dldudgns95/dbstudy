@@ -34,3 +34,9 @@ git reset --hard '코드'					//'코드'에 적혀 있는 commit으로 리셋시
 
 git remote add origin https://github.com/dldudgns95/dbstudy.git		// 원격 레파지토리 등록
 git push origin main					// 로컬->원격으로 올리기
+
+fatal: refusing to merge unrelated histories 해결법
+git pull origin main --allow-unrelated-histories
+이 명령 옵션은 이미 존재하는 두 프로젝트의 기록(history)을 저장하는 드문 상황에 사용된다고 한다.
+즉, git에서는 서로 관련 기록이 없는 이질적인 두 프로젝트를 병합할 때 기본적으로 거부하는데, 이것을 허용해 주는 것이다.
+
